@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/themeCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/no_photo"
+            android:layout_margin="@dimen/dp10margin"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/t_image"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp10margin"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_blue_light"
+            android:layout_toRightOf="@id/t_image"
+            android:text="Автор"
+            android:id="@+id/t_authorName"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/t_authorName"
+            android:layout_below="@+id/t_authorName"
+            android:text="дата"
+            android:id="@+id/theme_date"/>
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/t_image"
+            android:layout_margin="@dimen/dp10margin"
+            android:orientation="vertical"
+            android:id="@+id/expand_layout">
+
+            <at.blogc.android.views.ExpandableTextView
+                android:id="@+id/expandableTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="5"
+                android:ellipsize="end"
+                app:animation_duration="1000"/>
+            <TextView
+                android:id="@+id/button_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/expand"/>
+
+        </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="@dimen/dp10margin"
+            android:layout_below="@id/expand_layout"
+            android:visibility="gone"
+            android:id="@+id/t_theme_img"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp10margin"
+            android:layout_below="@id/t_theme_img"
+            android:src="@drawable/ic_map_marker"
+            android:id="@+id/t_map_market"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp10margin"
+            android:layout_toRightOf="@id/t_map_market"
+            android:layout_alignBottom="@id/t_map_market"
+            android:id="@+id/t_location"
+            />
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
