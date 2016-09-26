@@ -5,11 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.digits.sdk.android.Digits;
-import com.squareup.picasso.OkHttpDownloader;
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
-
 import com.twitter.sdk.android.core.TwitterCore;
+
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -38,12 +38,12 @@ public class App extends Application {
         Digits.Builder digitsBuilder = new Digits.Builder().withTheme(R.style.AppTheme);
         Fabric.with(this, new TwitterCore(authConfig), digitsBuilder.build(), new Digits.Builder().build());
 
-     /*   Picasso.Builder builder = new Picasso.Builder(this);
-        builder.downloader(new OkHttpDownloader(this, Integer.MAX_VALUE));
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttp3Downloader(this, Integer.MAX_VALUE));
         Picasso built = builder.build();
         built.setIndicatorsEnabled(true);
         built.setLoggingEnabled(true);
-        Picasso.setSingletonInstance(built);*/
+        Picasso.setSingletonInstance(built);
 
     }
 

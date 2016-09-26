@@ -41,8 +41,11 @@
         <activity
             android:name=".activity.RegisterActivity"
             android:parentActivityName=".activity.WelcomActivity" />
-        <activity android:name=".activity.NewPostActivity" />
-        <activity android:name=".activity.UserActivity"></activity>
+        <activity android:name=".activity.NewPostActivity"
+            android:parentActivityName=".activity.MainActivity"/>
+        <activity android:name=".activity.UserActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

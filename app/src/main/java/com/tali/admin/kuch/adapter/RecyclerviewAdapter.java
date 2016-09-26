@@ -1,7 +1,6 @@
 package com.tali.admin.kuch.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import com.tali.admin.kuch.R;
 import com.tali.admin.kuch.model.Post;
 
+import java.io.File;
 import java.util.List;
 
 import at.blogc.android.views.ExpandableTextView;
@@ -24,6 +24,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
     private Context mContext;
     OnItemClickListener mItemClickListener;
     private List<Post> posts;
+
     // 2
     public RecyclerviewAdapter(Context context, List<Post> posts) {
         this.mContext = context;
@@ -38,6 +39,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
         public ExpandableTextView description;
         public ImageView themeImg;
         public TextView location;
+
         public ViewHolder(View itemView) {
             super(itemView);
             authorImg = (ImageView) itemView.findViewById(R.id.t_image);
@@ -120,7 +122,7 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
     // 3
     @Override
-         public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Post post = posts.get(position);
         Picasso.with(mContext).load(post.getUser().getProfilePictureUrl())
                 .placeholder(R.drawable.no_photo)
@@ -133,18 +135,23 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
                     @Override
                     public void onError() {
-                        holder.authorImg.setImageURI(Uri.parse(post.getUser().getProfilePictureUrl()));
+                        Picasso.with(mContext)
+                                .load(new File(post.getUser().getProfilePictureUrl()))
+                                .placeholder(R.drawable.no_photo)
+                                .error(R.drawable.no_photo)
+                                .into(holder.authorImg);
                     }
                 });
         holder.authorName.setText(post.getUser().getUserName());
         holder.themeDate.setText(post.getThemeDate());
         holder.description.setText(post.getDescription());
         holder.location.setText(post.getLocation());
-        if (!post.getThemeImg().equals("")){
+        if (!post.getThemeImg().equals("")) {
             holder.themeImg.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load(post.getThemeImg())
                     .placeholder(R.drawable.no_image)
-                    .into(holder.themeImg, new com.squareup.picasso.Callback(){
+                    .error(R.drawable.no_image)
+                    .into(holder.themeImg, new com.squareup.picasso.Callback() {
                         @Override
                         public void onSuccess() {
 
@@ -152,7 +159,11 @@ public class RecyclerviewAdapter extends RecyclerView.Adapter<RecyclerviewAdapte
 
                         @Override
                         public void onError() {
-                            holder.themeImg.setImageURI(Uri.parse(post.getThemeImg()));
+                            Picasso.with(mContext)
+                                    .load(new File(post.getThemeImg()))
+                                    .placeholder(R.drawable.no_image)
+                                    .error(R.drawable.no_image)
+                                    .into(holder.themeImg);
                         }
                     });
         }

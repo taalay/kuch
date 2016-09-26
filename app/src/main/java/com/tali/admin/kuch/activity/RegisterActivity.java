@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,10 +19,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.digits.sdk.android.Digits;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.tali.admin.kuch.R;
 import com.tali.admin.kuch.data.db.DBHelper;
 import com.tali.admin.kuch.model.PreferencesHelper;
@@ -32,8 +27,8 @@ import com.tali.admin.kuch.util.Util;
 import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int TAKEPICTURE = 0;
-    private static final int FROMGALLERY = 1;
+    private static final int TAKEPICTURE = 1;
+    private static final int FROMGALLERY = 2;
     private static final String PROFILE_PHOTO_NAME = "profile";
     private ImageView userImage;
     private Bitmap userImageBitmap;
@@ -88,6 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
         if (result) {
             PreferencesHelper.setUserInformation(userName, phoneNumber, userLocation, sex, photoPath);
+            System.out.println("hui" + PreferencesHelper.getUser().toString());
             DBHelper.getInstance(this).addOrUpdateUser(PreferencesHelper.getUser());
         }
         return result;
@@ -134,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 if (resultCode == RESULT_OK) {
                     Uri selectedImage = data.getData();
                     userImage.setImageURI(selectedImage);
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);

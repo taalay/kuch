@@ -16,10 +16,10 @@ public class InitialActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Digits.getActiveSession() == null) {
-            if (PreferencesHelper.getName().equals("")){
+        if (Digits.getActiveSession() != null) {
+            if (PreferencesHelper.getName().equals("")) {
                 startActivityRegister();
-            }else {
+            } else {
                 startThemeActivity();
             }
         } else {

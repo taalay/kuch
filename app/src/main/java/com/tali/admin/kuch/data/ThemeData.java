@@ -33,6 +33,6 @@ public class ThemeData {
         databaseHelper.addPost(samplePost);
 
         // Get all posts from database
-       return databaseHelper.getAllPosts();
+        return databaseHelper.getAllPosts();
     }
 }

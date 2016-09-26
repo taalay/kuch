@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.tali.admin.kuch.model.Post;
-import com.tali.admin.kuch.model.Theme;
 import com.tali.admin.kuch.model.User;
 
 import java.util.ArrayList;
@@ -60,28 +59,28 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void onCreate(SQLiteDatabase db) {
         Log.d(null, "DB created");
-        String CREATE_POSTS_TABLE = "create table if not exists "+TABLE_POSTS + "("
-                        + KEY_POST_ID +" integer primary key,"   //Порядковый номер в базе
-                        + KEY_POST_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," // Define a foreign key
-                        + DESCRIPTION + " text,"                         //Описания
-                        + THEME_IMG+ " text,"                            //изображение темы
-                        + THEME_DATE+" text,"                       //дата
-                        + LOCATION+" text"                        //локация
-                        + ");";
+        String CREATE_POSTS_TABLE = "create table if not exists " + TABLE_POSTS + "("
+                + KEY_POST_ID + " integer primary key,"   //Порядковый номер в базе
+                + KEY_POST_USER_ID_FK + " INTEGER REFERENCES " + TABLE_USERS + "," // Define a foreign key
+                + DESCRIPTION + " text,"                         //Описания
+                + THEME_IMG + " text,"                            //изображение темы
+                + THEME_DATE + " text,"                       //дата
+                + LOCATION + " text"                        //локация
+                + ");";
 
         String CREATE_USERS_TABLE = "create table if not exists " + TABLE_USERS +
                 "(" +
                 KEY_USER_ID + " INTEGER PRIMARY KEY," +
                 KEY_USER_NAME + " TEXT," +
-                KEY_USER_PROFILE_PICTURE_URL + " TEXT" +
-                PHONE_NUMBER + " TEXT" +
+                KEY_USER_PROFILE_PICTURE_URL + " TEXT," +
+                PHONE_NUMBER + " TEXT," +
                 USER_LOCATION + " TEXT" +
                 ")";
 
         db.execSQL(CREATE_POSTS_TABLE);
         db.execSQL(CREATE_USERS_TABLE);
 
-        Log.d(null, "inserted");
+        Log.d(TAG, "inserted");
     }
 
     public void addPost(Post post) {
@@ -191,7 +190,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     newPost.setThemeDate(cursor.getString(cursor.getColumnIndex(THEME_DATE)));
                     newPost.setLocation(cursor.getString(cursor.getColumnIndex(LOCATION)));
                     posts.add(newPost);
-                } while(cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
         } catch (Exception e) {
             Log.d(TAG, "Error while trying to get posts from database");
@@ -203,7 +202,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return posts;
     }
 
-    public User getUser(String id){
+    public User getUser(String id) {
         String USER_SELECT_QUERY =
                 String.format("SELECT * FROM %s WHERE %s = '%s'",
                         TABLE_USERS,
@@ -219,7 +218,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 newUser.setPhoneNumber(cursor.getString(cursor.getColumnIndex(PHONE_NUMBER)));
                 newUser.setLocation(cursor.getString(cursor.getColumnIndex(USER_LOCATION)));
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.d(TAG, "Error while trying to get posts from database");
         } finally {
             if (cursor != null && !cursor.isClosed()) {
@@ -237,7 +236,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         // Updating profile picture url for user with that userName
         return db.update(TABLE_USERS, values, KEY_USER_NAME + " = ?",
-                new String[] { String.valueOf(user.getUserName()) });
+                new String[]{String.valueOf(user.getUserName())});
     }
 
     public void deleteAllPostsAndUsers() {
@@ -252,6 +251,36 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.d(TAG, "Error while trying to delete all posts and users");
         } finally {
             db.endTransaction();
+        }
+    }
+
+    public void printAll() {
+        String POSTS_SELECT_QUERY =
+                String.format("SELECT * FROM %s",
+                        TABLE_USERS);
+
+        // "getReadableDatabase()" and "getWriteableDatabase()" return the same object (except under low
+        // disk space scenarios)
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(POSTS_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    User newUser = new User();
+                    newUser.setUserName(cursor.getString(cursor.getColumnIndex(KEY_USER_NAME)));
+                    newUser.setProfilePictureUrl(cursor.getString(cursor.getColumnIndex(KEY_USER_PROFILE_PICTURE_URL)));
+                    newUser.setPhoneNumber(cursor.getString(cursor.getColumnIndex(PHONE_NUMBER)));
+                    newUser.setLocation(cursor.getString(cursor.getColumnIndex(USER_LOCATION)));
+
+                    System.out.println(newUser.toString());
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Error while trying to get posts from database");
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
         }
     }
 

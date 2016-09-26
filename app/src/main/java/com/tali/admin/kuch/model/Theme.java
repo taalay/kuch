@@ -13,7 +13,7 @@ public class Theme {
     private String themeDate;
     private String themeImg;
 
-    public Theme(String authorName, String themeDate,String description,String themeImg, String location) {
+    public Theme(String authorName, String themeDate, String description, String themeImg, String location) {
         this.authorName = authorName;
         this.themeDate = themeDate;
         this.description = description;
@@ -24,6 +24,7 @@ public class Theme {
     public ArrayList<String> getPictures() {
         return pictures == null ? new ArrayList<String>() : pictures;
     }
+
     public void setPictures(ArrayList<String> pictures) {
         this.pictures = pictures;
     }

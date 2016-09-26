@@ -4,20 +4,17 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.digits.sdk.android.Digits;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
@@ -32,8 +29,11 @@ import com.tali.admin.kuch.model.User;
 import com.tali.admin.kuch.util.Util;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
-public class NewPostActivity extends AppCompatActivity implements View.OnClickListener{
+public class NewPostActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int TAKEPICTURE = 1;
     private static final int FROMGALLERY = 2;
@@ -51,7 +51,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         description = (EditText) findViewById(R.id.n_description);
         themeImgView = (ImageView) findViewById(R.id.n_theme_img);
         location = (TextView) findViewById(R.id.n_location);
@@ -67,7 +67,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.n_img_location:
                 onPickButtonClick();
                 break;
@@ -100,7 +100,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
                     themeImgView.setImageURI(selectedImage);
                     photoisFromGallery = FROMGALLERY;
 
-                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
                     Cursor cursor = getContentResolver().query(selectedImage,
                             filePathColumn, null, null, null);
@@ -112,7 +112,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
             case REQUEST_PLACE_PICKER:
-                if (resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     // The user has selected a place. Extract the name and address.
                     final Place place = PlacePicker.getPlace(data, this);
                     final CharSequence address = place.getAddress();
@@ -131,7 +131,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
         int id = item.getItemId();
 
         if (id == R.id.loggin) {
-            if (tryToPost()){
+            if (tryToPost()) {
                 finish();
             }
             return true;
@@ -145,8 +145,8 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
         try {
             PlacePicker.IntentBuilder intentBuilder =
                     new PlacePicker.IntentBuilder();
-            LatLngBounds LatLng  = new LatLngBounds(new LatLng(40.968023,70.859871),
-                    new LatLng(43.077392,78.552947));
+            LatLngBounds LatLng = new LatLngBounds(new LatLng(40.968023, 70.859871),
+                    new LatLng(43.077392, 78.552947));
             intentBuilder.setLatLngBounds(LatLng);
             Intent intent = intentBuilder.build(this);
             // Start the intent by requesting a result,
@@ -171,7 +171,7 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
             result = false;
         }
         if (tempLocation.length() <= 0) {
-            Toast.makeText(this,"Укажите местонахождения", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Укажите местонахождения", Toast.LENGTH_LONG).show();
             result = false;
         }
         if (result) {
@@ -181,6 +181,9 @@ public class NewPostActivity extends AppCompatActivity implements View.OnClickLi
             post.setDescription(tempDescription);
             post.setThemeImg(getPhotoPath());
             post.setLocation(tempLocation);
+            DateFormat df = new SimpleDateFormat("dd MM yyyy, HH:mm");
+            String date = df.format(Calendar.getInstance().getTime());
+            post.setThemeDate(date);
             post.setUser(user);
             DBHelper.getInstance(this).addPost(post);
         }

@@ -22,6 +22,16 @@ public class User {
         this.profilePictureUrl = profilePictureUrl;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userName='" + userName + '\'' +
+                ", profilePictureUrl='" + profilePictureUrl + '\'' +
+                ", location='" + location + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
+
     public String getLocation() {
         return location;
     }

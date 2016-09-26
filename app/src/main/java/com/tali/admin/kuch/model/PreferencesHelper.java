@@ -1,10 +1,8 @@
 package com.tali.admin.kuch.model;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.tali.admin.kuch.App;
-import com.tali.admin.kuch.data.db.DBHelper;
 
 import java.io.IOException;
 
@@ -35,19 +33,19 @@ public class PreferencesHelper {
                 ", region='" + getRegion() + '\'' +
                 ", photoPath='" + getPhotoPath() + '\'' +
                 ", number='" + getNumber() + '\'' +
-                ", sex='" + getSex()+'\''+
+                ", sex='" + getSex() + '\'' +
                 ", digitsId=" + getDigitsId() +
                 '}';
     }
 
-    public static void setUserInformation(String name , String phoneNumber, String location,String sex, String photoPath) {
+    public static void setUserInformation(String name, String phoneNumber, String location, String sex, String photoPath) {
         setName(name);
         setPhotoPath(photoPath);
         setNumber(phoneNumber);
         setRegion(location);
         setSex(sex);
 
-       // pullToServer();
+        // pullToServer();
     }
 
     public static String getName() {
@@ -112,8 +110,8 @@ public class PreferencesHelper {
         return "";
     }
 
-    public static User getUser(){
-        User temp =  new User();
+    public static User getUser() {
+        User temp = new User();
         temp.setProfilePictureUrl(getPhotoPath());
         temp.setUserName(getName());
         temp.setPhoneNumber(getNumber());
@@ -133,18 +131,18 @@ public class PreferencesHelper {
         getEditor().clear().commit();
     }
 
-    public static void pullToServer(){
+    public static void pullToServer() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 OkHttpClient client = new OkHttpClient();
                 RequestBody formBody = new FormBody.Builder()
-                        .add(NAME,getName())
+                        .add(NAME, getName())
                         .add(MIDDLENAME, getMiddleName())
-                        .add(REGION,getRegion())
-                        .add(PHOTOPATH,getPhotoPath())
-                        .add(NUMBER,getNumber())
-                        .add(DIGITSID,String.valueOf(getDigitsId()))
+                        .add(REGION, getRegion())
+                        .add(PHOTOPATH, getPhotoPath())
+                        .add(NUMBER, getNumber())
+                        .add(DIGITSID, String.valueOf(getDigitsId()))
                         .build();
                 Request request = new Request.Builder()
                         .url("http://176.126.167.231:86/import/")

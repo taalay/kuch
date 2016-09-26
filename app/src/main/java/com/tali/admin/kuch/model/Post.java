@@ -1,7 +1,5 @@
 package com.tali.admin.kuch.model;
 
-import java.util.ArrayList;
-
 /**
  * Created by admin on 06.09.2016.
  */
